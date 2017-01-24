@@ -21,9 +21,49 @@ Wherein we discover the gateways to dynamic processes on a server.
 But First
 ---------
 
+.. rst-class:: build left
+.. container::
+
+  Agenda:
+
+  .. rst-class:: build
+
+  * Class website - where to find this week's materials
+  * Review of last week
+  * Homework review
+  * Intro to CGI and exercises
+  * Break
+  * Lightning Talks (Paul Briant, Charles Robinson)
+  * Intro to WSGI and exercises
+  * Homework and plan for next week
+
+
+.. nextslide::
+
+.. rst-class:: large centered
+
+Class website - where to find this week's materials
+
+
+.. nextslide::
+
+.. rst-class:: large centered
+
+Review of last week
+
+
+.. nextslide::
+
 .. rst-class:: large centered
 
 Homework Review and Questions
+
+
+.. nextslide::
+
+.. rst-class:: large centered
+
+On to Gateways!
 
 
 Previously
@@ -72,11 +112,10 @@ A computer has an *environment*:
     or in PowerShell:
 
     .. code-block:: posh
-    
+
         PS C:\> Get-ChildItem Env:
         ALLUSERSPROFILE             C:\ProgramData
         ...
-
 
 
 .. nextslide:: Setting The Environment
@@ -103,7 +142,7 @@ A computer has an *environment*:
     or in PowerShell:
 
     .. code-block:: posh
-    
+
         PS C:\> $env:VARIABLE = "some value"
         PS C:\> Get-ChildItem Env:VARIABLE
         'some value'
@@ -135,7 +174,7 @@ These new values are now part of the *environment*
     PowerShell:
 
     .. code-block:: posh
-    
+
         PS C:\> Get-ChildItem Env:
         ...
         VARIABLE                    'some value'
@@ -505,7 +544,7 @@ environment so it has what is needed.
 
     .. rst-class:: tiny
     .. code-block:: python
-    
+
         def test(environ=os.environ):
             ...
             print("Content-type: text/html")
@@ -528,7 +567,7 @@ What the Server Does:
 
 * parses the request
 * sets up the environment, including HTTP and SERVER variables
-* sends a ``HTTP/1.1 200 OK\r\n`` first line to the client 
+* sends a ``HTTP/1.1 200 OK\r\n`` first line to the client
 * figures out if the URI points to a CGI script and runs it
 * appends what comes from the script on stdout and sends that back
 
@@ -538,7 +577,7 @@ What the Script Does:
 
 * names appropriate *executable* in the *shebang* line
 * uses os.environ to read information from the HTTP request
-* builds *any and all* extra **HTTP Headers** |br| 
+* builds *any and all* extra **HTTP Headers** |br|
   (Content-type:, Content-length:, ...)
 * prints the headers, empty line and script output (body) to stdout
 
@@ -557,11 +596,50 @@ Let's make our own version of this.
     * In the directory ``cgi-bin`` you will find the file ``cgi_2.py``.
     * Open that file in your editor.
     * The script contains some html with text containing placeholders.
-    * You should use Python and the CGI environment to fill the the blanks.
+    * You should use Python and the CGI environment to fill in the blanks.
     * You can view the results of your work by loading
       ``http://localhost:8000/`` and clicking on *Exercise One*
 
     **GO**
+
+.. nextslide:: Your task
+
+.. rst-class:: build
+
+.. code-block:: python
+
+    <p>This page was requested by IP Address {client_ip}</p>
+    </body>
+    </html>""".format(
+        software=os.environ.get('SERVER_SOFTWARE', default),
+        script='aaaa',
+        month='bbbb',
+        date='cccc',
+        year='dddd',
+        client_ip='eeee'
+    )
+    print(body)
+
+
+.. nextslide:: My Solution
+
+.. rst-class:: build
+
+.. code-block:: python
+
+    now = datetime.datetime.now()
+    ...
+    <p>This page was requested by IP Address {client_ip}</p>
+    </body>
+    </html>""".format(
+        software=os.environ.get('SERVER_SOFTWARE', default),
+        script=os.environ.get('SCRIPT_NAME', default),
+        month=now.strftime('%b'),
+        date=now.day,
+        year=now.year,
+        client_ip=os.environ.get('REMOTE_ADDR', default)
+    )
+    print(body)
 
 
 Getting Data from Users
@@ -1374,7 +1452,7 @@ standard library.
 .. rst-class:: build
 .. container::
 
-    This is a common occurence in web development.  But it can be hazardous.
+    This is a common occurrence in web development.  But it can be hazardous.
 
     In order to practice safe development I am going to ask you to read and
     follow through a `brief tutorial`_ I've created on the subject.
@@ -1397,4 +1475,23 @@ the ``wsgiref`` module. It's the canonical example of a simple wsgi server
 
 .. rst-class:: build centered
 
-**See you Next Time**
+
+Next Week
+---------
+
+Session 4:
+
+Lightning Talks:
+
+Isaac Cowhey
+
+Nachiket Galande
+
+Enrique Silva
+
+
+.. nextslide::
+
+Session 4:
+
+APIs and Mashups
