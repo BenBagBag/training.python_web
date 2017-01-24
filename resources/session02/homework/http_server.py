@@ -47,9 +47,7 @@ def resolve_uri(uri):
         if os.path.isfile(path):
             mimetype = mimetypes.guess_type(path)[0].encode("utf8")
             with open(path, "rb") as f:
-                # resource = base64.b64encode(f.read())
                 resource = f.read()
-            # resource = resource.encode("utf8")
         elif os.path.isdir(path):
             mimetype = b"text/plain"
             resource = "\n".join(os.listdir(path)).encode("utf8")
